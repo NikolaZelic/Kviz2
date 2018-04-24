@@ -42,20 +42,40 @@
             function ajaxsign(){   
                 var user = $("#signuser").val();
                 var pass = $("#signpass").val();
-                $.post("login",{"username":user,"password":pass},function(data,status){
+                $.post("singup",{"username":user,"password":pass},function(data,status){
                     consle.log(data.user);
                     consle.log(data.pass);
                 });
             };
-            
+            var brQuest=0;
+            var questions = [];
             function makeQuiz(){
-                json("questions",{},function(data,status){
-                    var ques = data.
-                    
-                    
-                    
+                $.get("questions",{},function(data,status){
+                    questions = data.questions;
+                    nextQuestion();
                 });
             }
+            function nextQuestion(){
+                $("#kviz").empty();
+                if(questions.length <= brQuest){
+                    $("#kviz").append("The end");
+                    return;
+                }
+                console.log(questions);
+                $("#kviz").append("<p>"+questions[brQuest]["text"]+"</p>");
+                for(var i = 0; i<4;i++){
+                    $("#kviz").append("<input id='n"+i+"' class='rad' type='radio' name='ans'> "+questions[brQuest]["answers"][i]["text"]+"</input>");
+                    
+                }
+                $("#kviz").append("<button onclick='next()'>Next</button>");
+                brQuest++;
+            }
+            function next(){
+                 nextQuestion(); 
+            }
+            
+            
+            
         </script>
     </head>
     <body>
@@ -119,10 +139,9 @@
                 </div>
                
             </div>
-            <div id="kviz">
-                <p id="question"></p>
+       
+                <div id="kviz"></div>
                 
-            </div>
             
             
         </div>
