@@ -1,11 +1,110 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Kviz</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <script>
+            $(document).ready(function(){
+                $("#checklog").click(function(){
+                   ajaxlog(); 
+                });
+                $("#checksign").click(function(){
+                   ajaxsign();
+                });
+                makeQuiz();
+            });
+    
+            function ajaxlog(){   
+                var user = $("#loguser").val();
+                var pass = $("#logpass").val();
+                $.post("login",{"user":user,"password":pass},function(data,status){
+                    consle.log(data.user);
+                    consle.log(data.pass);
+                });
+            };
+            function ajaxsign(){   
+                var user = $("#signuser").val();
+                var pass = $("#signpass").val();
+                $.post("login",{"user":user,"password":pass},function(data,status){
+                    consle.log(data.user);
+                    consle.log(data.pass);
+                });
+            };
+            
+            function makeQuiz(){
+                var kviz = document.getElementById("kviz");
+                kviz.innerHTML="Prostor za kviz";
+                
+            }
+        </script>
     </head>
     <body>
-        <div>TODO write content</div>
+        <div id="content">
+            <div id="login">
+                <button onclick="document.getElementById('id01').style.display = 'block'" style="width:auto;">Login</button>
+
+                <div id="id01" class="modal">
+
+                   <div id="form" class="modal-content animate">
+                        <div class="imgcontainer">
+                            <span onclick="document.getElementById('id01').style.display = 'none'" class="close" title="Close Modal">&times;</span>
+
+                        </div>
+
+                        <div class="container">
+                            <label  ><b>Username</b></label>
+                            <input id="loguser" type="text" placeholder="Enter Username"/>
+
+                            <label ><b>Password</b></label>
+                            <input id="logpass" type="password" placeholder="Enter Password"/>
+
+                            <button id="checklog">Login</button>
+                        </div>
+
+                        <div class="container" style="background-color:#f1f1f1">
+                            <button type="button" onclick="document.getElementById('id01').style.display = 'none'" class="cancelbtn">Cancel</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="signup">
+                <button onclick="document.getElementById('id02').style.display = 'block'" style="width:auto;">Sign Up</button>
+
+                <div id="id02" class="modal">
+
+                   <div id="formsign" class="modal-content animate">
+                        <div class="imgcontainer">
+                            <span onclick="document.getElementById('id02').style.display = 'none'" class="close" title="Close Modal">&times;</span>
+
+                        </div>
+
+                        <div class="container">
+                            <label  ><b>Username</b></label>
+                            <input id="signuser" type="text" placeholder="Enter Username"/>
+
+                            <label ><b>Password</b></label>
+                            <input id="signpass" type="password" placeholder="Enter Password"/>
+
+                            <button id="checksign">Sign Up</button>
+                        </div>
+
+                        <div class="container" style="background-color:#f1f1f1">
+                            <button type="button" onclick="document.getElementById('id02').style.display = 'none'" class="cancelbtn">Cancel</button>
+
+                        </div>
+                    </div>
+                </div>
+               
+            </div>
+            <div id="kviz">
+                
+            </div>
+            
+            
+        </div>
     </body>
 </html>
