@@ -20,7 +20,7 @@
             function ajaxlog(){   
                 var user = $("#loguser").val();
                 var pass = $("#logpass").val();
-                $.post("login",{"user":user,"password":pass},function(data,status){
+                $.post("\login",{"username":user,"password":pass},function(data,status){
                     consle.log(data.user);
                     consle.log(data.pass);
                 });
