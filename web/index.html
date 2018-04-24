@@ -14,30 +14,46 @@
                 $("#checksign").click(function(){
                    ajaxsign();
                 });
-                makeQuiz();
+                
             });
     
             function ajaxlog(){   
                 var user = $("#loguser").val();
                 var pass = $("#logpass").val();
-                $.post("login",{"user":user,"password":pass},function(data,status){
-                    consle.log(data.user);
-                    consle.log(data.pass);
+                $.post("login",{"username":user,"password":pass},function(data,status){
+                    console.log(data.username);
+                    if(data.username==="true" && data.password==="true"){
+                        $("#message").text("Log in is success");
+                        makeQuiz(user);
+                    }else{
+                        if(data.username!=="true" && data.password !=="true"){
+                            $("#message").text("incorect username and password");
+                        }else if(data.username!=="true"){
+                            $("#message").text("incorect username");
+                        }else if( data.password!=="true"){
+                            $("#message").text("incorect password");
+                        }else{
+                            $("#message").text("problem sa kodom");
+                        }
+                    }
                 });
             };
             function ajaxsign(){   
                 var user = $("#signuser").val();
                 var pass = $("#signpass").val();
-                $.post("login",{"user":user,"password":pass},function(data,status){
+                $.post("login",{"username":user,"password":pass},function(data,status){
                     consle.log(data.user);
                     consle.log(data.pass);
                 });
             };
             
             function makeQuiz(){
-                var kviz = document.getElementById("kviz");
-                kviz.innerHTML="Prostor za kviz";
-                
+                json("questions",{},function(data,status){
+                    var ques = data.
+                    
+                    
+                    
+                });
             }
         </script>
     </head>
@@ -62,6 +78,7 @@
                             <input id="logpass" type="password" placeholder="Enter Password"/>
 
                             <button id="checklog">Login</button>
+                            <label id="message"></label>
                         </div>
 
                         <div class="container" style="background-color:#f1f1f1">
@@ -70,6 +87,7 @@
                         </div>
                     </div>
                 </div>
+                
             </div>
             <div id="signup">
                 <button onclick="document.getElementById('id02').style.display = 'block'" style="width:auto;">Sign Up</button>
@@ -101,6 +119,7 @@
                
             </div>
             <div id="kviz">
+                <p id="question"></p>
                 
             </div>
             
