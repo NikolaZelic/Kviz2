@@ -7,9 +7,17 @@
         <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
         <link rel="stylesheet" type="text/css" href="style.css">
         <script>
+            var score =0;
+            var brQuest=0;
+            var questions = [];
+            var login = false;
+            var username;
             $(document).ready(function(){
                 $("#checklog").click(function(){
-                   ajaxlog(); 
+                    if(!login){
+                        ajaxlog(); 
+                        
+                    }
                 });
                 $("#checksign").click(function(){
                    ajaxsign();
@@ -24,7 +32,9 @@
                     console.log(data.username);
                     if(data.username==="true" && data.password==="true"){
                         $("#message").text("Log in is success");
-                        makeQuiz(user);
+                        login=true;
+                        username = user;
+                        makeQuiz();
                     }else{
                         if(data.username!=="true" && data.password !=="true"){
                             $("#message").text("incorect username and password");
@@ -35,6 +45,7 @@
                         }else{
                             $("#message").text("problem sa kodom");
                         }
+                        
                     }
 
                 });
@@ -43,12 +54,16 @@
                 var user = $("#signuser").val();
                 var pass = $("#signpass").val();
                 $.post("singup",{"username":user,"password":pass},function(data,status){
-                    consle.log(data.user);
-                    consle.log(data.pass);
+                    if(data.success==="true"){
+                         $("#messagesign").empty();
+                        $("#messagesign").append("Uspesna prijava");
+                    }else{
+                        $("#messagesign").empty();
+                        $("#messagesign").append("Nesupesna prijava");
+                    }
                 });
             };
-            var brQuest=0;
-            var questions = [];
+            
             function makeQuiz(){
                 $.get("questions",{},function(data,status){
                     questions = data.questions;
@@ -58,22 +73,34 @@
             function nextQuestion(){
                 $("#kviz").empty();
                 if(questions.length <= brQuest){
-                    $("#kviz").append("The end");
+                    $("#kviz").append("The end <br>"+username +",your score is:"+score);
                     return;
                 }
                 console.log(questions);
                 $("#kviz").append("<p>"+questions[brQuest]["text"]+"</p>");
                 for(var i = 0; i<4;i++){
-                    $("#kviz").append("<input id='n"+i+"' class='rad' type='radio' name='ans'> "+questions[brQuest]["answers"][i]["text"]+"</input>");
+                    $("#kviz").append("<input id='"+i+"' class='rad' type='radio' name='ans'> "+questions[brQuest]["answers"][i]["text"]+"</input>");
                     
                 }
                 $("#kviz").append("<button onclick='next()'>Next</button>");
-                brQuest++;
-            }
-            function next(){
-                 nextQuestion(); 
+               
             }
             
+            function next(){
+                var idAnsw;
+                $(".rad:checked").each(function(){
+                 idAnsw = this.id;
+                });
+                for(var answers in questions[brQuest]["answers"]){
+                   if(questions[brQuest]["answers"][answers]["correct"]==="true" && answers==idAnsw){
+                       score+=10;
+                    }
+                }
+                 brQuest++;
+                 nextQuestion();
+            }
+            
+           
             
             
         </script>
@@ -129,6 +156,7 @@
                             <input id="signpass" type="password" placeholder="Enter Password"/>
 
                             <button id="checksign">Sign Up</button>
+                            <label id="messagesign"></label>
                         </div>
 
                         <div class="container" style="background-color:#f1f1f1">
